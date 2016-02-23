@@ -1,0 +1,60 @@
+#!/bin/bash -l
+#filepath: ~/bin/tmz
+
+SESSION_NAME='jerico'
+JERICO_ROOT_DIR="/var/ruby/jerico"
+JIS_ROOT_DIR="/var/ruby/cloudficacao-jis"
+
+tmux has-session -t ${SESSION_NAME}
+
+# open these only if we don't already have a session
+# if we do just attach to that session
+if [ $? != 0 ]
+then
+  # -n => name of window
+  tmux new-session -d -s ${SESSION_NAME} -n src
+
+  # 1 - full-window with vim - - - - - - - - - - - -
+  tmux send-keys -t ${SESSION_NAME} "cd $JERICO_ROOT_DIR" C-m
+  # - - - - - - - - - - - - - - - - - - - - - - - --
+
+  # 2 - pry jericó - - - - - - - - - - - - - - - -
+  tmux new-window -n pry-jerico -t ${SESSION_NAME} -c ${JERICO_ROOT_DIR}
+  # >> pry
+  tmux send-keys -t ${SESSION_NAME}:2 'bundle exec rails console' C-m
+  # >> terminal 1index window 1index pane => 1.1
+  tmux split-window -h -t ${SESSION_NAME}:2 -c ${JERICO_ROOT_DIR}
+  tmux send-keys -t ${SESSION_NAME}:2.2 '(/usr/bin/google-chrome-stable http://localhost:3000 &> /dev/null &);git log;git status' C-m
+
+  # 3 - pry jis - - - - - - - - - - - - - - - -
+  tmux new-window -n pry-jis -t ${SESSION_NAME} -c ${JIS_ROOT_DIR}
+  # >> pry
+  tmux send-keys -t ${SESSION_NAME}:3 'bundle exec rails console' C-m
+  # >> terminal 1index window 1index pane => 1.1
+  tmux split-window -h -t ${SESSION_NAME}:3 -c ${JIS_ROOT_DIR}
+  tmux send-keys -t ${SESSION_NAME}:3.2 'git log;git status' C-m
+
+  # 4 - Servers - - - - - - - - - - - - - - - - - - -
+  # >> jericó server
+  tmux new-window -n servers -t ${SESSION_NAME} -c ${JERICO_ROOT_DIR}
+  tmux send-keys -t ${SESSION_NAME}:4.1 'bundle exec rails server' C-m
+
+  # >> jis server
+  tmux split-window -h -t ${SESSION_NAME}:4.1 -c ${JIS_ROOT_DIR}
+  tmux send-keys -t ${SESSION_NAME}:4.2 'bundle exec rails server -p3001' C-m
+
+  # >> jericó sidekiq
+  tmux split-window -v -t ${SESSION_NAME}:4.1 -c ${JERICO_ROOT_DIR}
+  tmux send-keys -t ${SESSION_NAME}:4.3 'bundle exec sidekiq' C-m
+
+
+  # >> jis sidekiq
+  tmux split-window -v -t ${SESSION_NAME}:4.2 -c ${JIS_ROOT_DIR}
+  tmux send-keys -t ${SESSION_NAME}:4.4 'bundle exec sidekiq' C-m
+  # - - - - - - - - - - - - - - - - - - - - - - - -
+
+  # start out on the first window when we attach
+  tmux select-window -t ${SESSION_NAME}:1
+fi
+
+tmux attach-session -t ${SESSION_NAME}
