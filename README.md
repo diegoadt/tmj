@@ -8,7 +8,11 @@
 - run ( $ tmj )
 - every command init by `ctrl+a`
 After this:
+
 1..4: switch window (src, pry-...)
+
 b: "minimize" tmj
+
 arrows (<-; ->..): switch panel
+
 ?: show help
