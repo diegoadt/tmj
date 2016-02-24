@@ -7,13 +7,12 @@
 
 #### How to use
 - run ( $ tmj )
-- every command init by `ctrl+a`
-After this:
+- all commands are started by `ctrl+a`, then:
 
-1..4: switch window (src, pry-...)
+    1..4: switch window (src, pry-...)
 
-b: "minimize" tmj
+    b: "minimize" tmj
 
-arrows (<-; ->..): switch panel
+    arrows (<-; ->..): switch panel
 
-?: show help
+    ?: show help
