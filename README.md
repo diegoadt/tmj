@@ -2,7 +2,7 @@
 ## IT DOES NOT WORK WITH RVM, YOU NEED TO INSTALL RBENV
 - install tmux ( $ sudo apt-get install tmux )
 - copy .tmux.conf to $HOME
-- edit "scriptpath"/tmj and change JERICO_ROOT_DIR and JIS_ROOT_DIR to our real path
+- create or edit your ~/.cloudficacao.conf setting JERICO_ROOT_DIR and JIS_ROOT_DIR to our real path
 - create symbolic link ( $ sudo ln -s "scriptpath"/tmj /bin/tmj )
 
 #### How to use

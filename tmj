@@ -1,9 +1,9 @@
 #!/bin/bash -l
 #filepath: ~/bin/tmz
 
+source ~/.cloudficacao.conf
+
 SESSION_NAME='jerico'
-JERICO_ROOT_DIR="/var/ruby/jerico"
-JIS_ROOT_DIR="/var/ruby/cloudficacao-jis"
 
 tmux has-session -t ${SESSION_NAME}
 
